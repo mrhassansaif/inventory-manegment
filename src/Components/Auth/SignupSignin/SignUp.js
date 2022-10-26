@@ -12,8 +12,8 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
 import { Link } from 'react-router-dom';
+import { getAuth, auth, createUserWithEmailAndPassword, db, doc, setDoc } from "../../FirebaseConfig/firebaseConfig"
 
 function Copyright(props) {
   return (
@@ -31,14 +31,36 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignUpSide() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
+
+
+
+  function signUp() {
+    let name = document.getElementById('username').value
+    let email = document.getElementById('email').value;
+    let password = document.getElementById('password').value;
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in 
+        const user = userCredential.user;
+        console.log(user);
+        setDoc(doc(db, "Users", user.uid), {
+          name: name,
+          email: email,
+          password: password
+        });
+      
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorMessage, errorCode)
+        // ..
+      });
+
+
+  }
+
 
   return (
     <ThemeProvider theme={theme}>
@@ -60,7 +82,7 @@ export default function SignUpSide() {
             <Typography component="h1" variant="h5">
               Sign Up
             </Typography>
-            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+            <Box component="form" noValidate sx={{ mt: 1 }}>
               <TextField
                 margin="normal"
                 required
@@ -96,10 +118,10 @@ export default function SignUpSide() {
                 label="Remember me"
               />
               <Button
-                type="submit"
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
+                onClick={signUp}
               >
                 Sign Up
               </Button>

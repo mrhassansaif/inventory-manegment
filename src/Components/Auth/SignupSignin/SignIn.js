@@ -12,8 +12,9 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
 import { Link } from 'react-router-dom';
+import { getAuth, auth, signInWithEmailAndPassword } from "../../FirebaseConfig/firebaseConfig"
+
 
 function Copyright(props) {
   return (
@@ -31,14 +32,27 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignInSide() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
+
+  function signIn() {
+    let email = document.getElementById('email').value;
+    let password = document.getElementById('password').value;
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in 
+        const user = userCredential.user;
+        console.log(user)
+        
+
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorMessage, errorCode)
+
+      });
+  }
+
 
   return (
     <ThemeProvider theme={theme}>
@@ -59,7 +73,7 @@ export default function SignInSide() {
             maxHeight: '100%',
           }}
         />
-        <Grid item xs={12} sm={8} md={5} style={{maxHeight: '100%'}} component={Paper} elevation={6} square>
+        <Grid item xs={12} sm={8} md={5} style={{ maxHeight: '100%' }} component={Paper} elevation={6} square>
           <Box
             sx={{
               my: 8,
@@ -75,7 +89,7 @@ export default function SignInSide() {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+            <Box component="form" noValidate sx={{ mt: 1 }}>
               <TextField
                 margin="normal"
                 required
@@ -101,10 +115,10 @@ export default function SignInSide() {
                 label="Remember me"
               />
               <Button
-                type="submit"
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
+                onClick={signIn}
               >
                 Sign In
               </Button>
@@ -115,7 +129,7 @@ export default function SignInSide() {
                   </Link> */}
                 </Grid>
                 <Grid item>
-                  <Link to = '/signup'>Don't have an account? Sign Up</Link>
+                  <Link to='/signup'>Don't have an account? Sign Up</Link>
                   {/* <Link href="/SignUp" variant="body2">
                     {"Don't have an account? Sign Up"}
                   </Link> */}
