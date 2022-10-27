@@ -1,33 +1,27 @@
-import React from 'react'
+import { React, useState } from 'react'
 
 import { auth, onAuthStateChanged, doc, getDoc, db, updateDoc } from "../FirebaseConfig/firebaseConfig";
 
-
+let snapData;
 export default function DashBoard() {
+  const [data, setdata] = useState()
 
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      const ref = doc(db, "users", user.uid);
+      const ref = doc(db, "Users", user.uid);
       const docSnap = getDoc(ref)
-      .then((snapshot) => {
-        snapData = snapshot.data()
-        console.log(snapData.name)
-        uid = user.uid
-        console.log(uid)
-
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/firebase.User
-      // const uid = user.uid;
-      // console.log(user.uid)
-      // ...
-    } 
-  }
-    else {
-      // User is signed out
-      // ...
+        .then((snapshot) => {
+          snapData = snapshot.data()
+          console.log(snapData.name)
+          const uid = user.uid
+          console.log(uid)
+          setdata(snapData.name)
+        })
+   } else {
+      console.log("error");
     }
   });
   return (
-    <div>Welcome </div>
+    <div>Welcome {data}</div>
   )
 }

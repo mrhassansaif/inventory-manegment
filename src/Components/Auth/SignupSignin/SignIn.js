@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Link, Navigate } from 'react-router-dom';
 import { getAuth, auth, signInWithEmailAndPassword } from "../../FirebaseConfig/firebaseConfig"
-import useState from 'react'
+import { useState } from 'react'
 
 function Copyright(props) {
   return (
@@ -61,7 +61,8 @@ export default function SignInSide() {
   return (
     <>
     {
-      Validate ? (<Navigate to='/dashboard' />) : (<ThemeProvider theme={theme}>
+      Validate ? (<Navigate to='/dashboard' />) : (
+      <ThemeProvider theme={theme}>
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
         <Grid
