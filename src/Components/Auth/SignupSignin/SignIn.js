@@ -12,9 +12,9 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { getAuth, auth, signInWithEmailAndPassword } from "../../FirebaseConfig/firebaseConfig"
-
+import useState from 'react'
 
 function Copyright(props) {
   return (
@@ -33,6 +33,8 @@ const theme = createTheme();
 
 export default function SignInSide() {
 
+  const [Validate, setValidate] = useState(false)
+
   function signIn() {
     let email = document.getElementById('email').value;
     let password = document.getElementById('password').value;
@@ -41,6 +43,8 @@ export default function SignInSide() {
         // Signed in 
         const user = userCredential.user;
         console.log(user)
+        setValidate(true)
+        
         
 
         // ...
@@ -55,7 +59,9 @@ export default function SignInSide() {
 
 
   return (
-    <ThemeProvider theme={theme}>
+    <>
+    {
+      Validate ? (<Navigate to='/dashboard' />) : (<ThemeProvider theme={theme}>
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
         <Grid
@@ -141,5 +147,7 @@ export default function SignInSide() {
         </Grid>
       </Grid>
     </ThemeProvider>
+  )}
+  </>
   );
 }
