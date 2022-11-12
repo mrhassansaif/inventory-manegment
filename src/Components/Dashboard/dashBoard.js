@@ -17,8 +17,8 @@ export default function DashBoard() {
           console.log(uid)
           setdata(snapData.name)
         })
-   } else {
-      console.log("error");
+     } else {
+       console.log("error");
     }
   });
   return (
